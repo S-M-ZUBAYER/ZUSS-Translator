@@ -7,11 +7,21 @@ import countries from './Countries';
 
 function App() {
 
-  const [selectLan, setSelectLan] = useState('')
-  const [targetLan, setTargetLan] = useState('')
+  const [selectLan, setSelectLan] = useState("")
+  const [targetLan, setTargetLan] = useState("")
   const [text, setText] = useState('');
+  const [midTranslate, setMidTranslate] = useState('');
+  const [targetTranslate, setTargetTranslate] = useState('');
+  
+  const toText=document.getElementById("to-text");
+  const midText=document.getElementById("mid-text");
 
 
+const handleTargetLan = (event) => {
+    event.preventDefault();
+    setTargetLan(event.target.value)
+
+  }
 
   const handleToCollectText = (event) => {
     event.preventDefault();
@@ -24,17 +34,114 @@ function App() {
     setSelectLan(event.target.value)
 
   }
-  const handleTargetLan = (event) => {
-    event.preventDefault();
-    setTargetLan(event.target.value)
-
-  }
+  
+// console.log(targetLan)
 
   const handleToTranslate = () => {
 
+toText.value="Translating"
+midText.value="Translating"
+
+ setText( text.trim());
+
+ const midInput={
+  text
+        }
+ const targetInput={
+  target:targetLan,
+  text
+        }
+
+
+
+//  let apiUrl = `http://localhost:5000/translate`;
+//       fetch(apiUrl,{
+//         method:"POST",
+//         headers:{
+//           "content-type":"application/json"
+//         },
+//         body:JSON.stringify(targetInput)
+//       })
+//         .then((res) => res.json())
+//         .then((data) => {
+//           // console.log(data.data)
+//           // toText.value = data.responseData.translatedText;
+//           // console.log(data?.isAxiosError)
+//           setTargetTranslate(data?.data);
+//           // finalText.innerText = finalTranslate;
+//           // // toText.value=finalTranslate;
+//           // const result=document.getElementById("outPut");
+//           // result.value=finalTranslate;
+//           // data.matches.forEach((data) => {
+//           //   if (data.id === 0) {
+//           //     toText.value = data.translation;
+//           //   }
+//           // });
+//           // toText.setAttribute("placeholder", "Translation");
+//         });
+
+        let apiUrlEng = `https://simple-node-server-s-m-zubayer.vercel.app/translateEng`;
+
+      fetch(apiUrlEng,{
+        method:"POST",
+        headers:{
+          "content-type":"application/json"
+        },
+        body:JSON.stringify(midInput)
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // console.log(data.data)
+          // toText.value = data.responseData.translatedText;
+          setMidTranslate(data?.data);
+          setText(data.data)
+          // finalText.innerText = finalTranslate;
+          // // toText.value=finalTranslate;
+          // const result=document.getElementById("outPut");
+          // result.value=finalTranslate;
+          // data.matches.forEach((data) => {
+          //   if (data.id === 0) {
+          //     toText.value = data.translation;
+          //   }
+          // });
+          // toText.setAttribute("placeholder", "Translation");
+        });
+
+
+        let apiUrl = `https://simple-node-server-s-m-zubayer.vercel.app/translate`;
+        fetch(apiUrl,{
+          method:"POST",
+          headers:{
+            "content-type":"application/json"
+          },
+          body:JSON.stringify(targetInput)
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            // console.log(data.data)
+            // toText.value = data.responseData.translatedText;
+            // console.log(data?.isAxiosError)
+            setTargetTranslate(data?.data);
+            // finalText.innerText = finalTranslate;
+            // // toText.value=finalTranslate;
+            // const result=document.getElementById("outPut");
+            // result.value=finalTranslate;
+            // data.matches.forEach((data) => {
+            //   if (data.id === 0) {
+            //     toText.value = data.translation;
+            //   }
+            // });
+            // toText.setAttribute("placeholder", "Translation");
+          });
+
+        console.log(midTranslate,targetTranslate)
+
+toText.value=targetTranslate
+midText.value=midTranslate
+
   }
 
-  console.log(selectLan, targetLan, text)
+
 
 
   return (
@@ -44,7 +151,7 @@ function App() {
         <h1 className="text-3xl font-bold mb-10">ZUSS Translator</h1>
         <div className=' bg-white md:flex rounded-lg p-5'>
           <div>
-            <textarea onChange={handleToCollectText} className="border-2 border-slate-600 rounded-tl-lg p-2  mt-2 ml-2 h-60  w-72  block"></textarea>
+            <textarea placeholder="please type here" onChange={handleToCollectText} className="border-2 border-slate-600 rounded-tl-lg p-2  mt-2 ml-2 h-60  w-72  block"></textarea>
             <div className="border-2 border-slate-600 ml-2 rounded-bl-lg mb-2">
               <div className="flex justify-between items-center mx-2 ">
                 <AiOutlineCopy></AiOutlineCopy>
@@ -52,7 +159,7 @@ function App() {
                 <AiOutlineSound></AiOutlineSound>
 
 
-                <div className="form-control" onChange={detectLan}>
+                <div className="form-control">
                   <div className="input-group" id='lan'>
                     <select name='language' type="boolean" placeholder='Sold Status' className="select select-bordered w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-green-500 bg-gray-200 text-gray-900">
                       <option disabled selected> Select language</option>
@@ -69,13 +176,13 @@ function App() {
             </div>
           </div>
           <div>
-            <textarea id className="border-2 border-slate-600 p-2  mt-2 h-60  w-72 block"></textarea>
+            <textarea placeholder="Translation" id="mid-text"  className="border-2 border-slate-600 p-2  mt-2 h-60  w-72 block"></textarea>
             <div className="border-2 border-slate-600  mb-2">
               <div className="flex justify-between items-center mx-2 ">
                 <AiOutlineCopy></AiOutlineCopy>
                 <CiMicrophoneOn></CiMicrophoneOn>
                 <AiOutlineSound></AiOutlineSound>
-                <div className="form-control" onChange={detectLan}>
+                <div className="form-control">
                   <div className="input-group" id='lan'>
                     <select name='language' type="boolean" placeholder='Sold Status' className="select select-bordered w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-green-500 bg-gray-200 text-gray-900">
                       <option disabled selected>English</option>
@@ -87,7 +194,7 @@ function App() {
             </div>
           </div>
           <div>
-            <textarea className="border-2 border-slate-600 rounded-tr-lg p-2 mt-2 mr-2 h-60  w-72 block"></textarea>
+            <textarea placeholder="Translation" id="to-text" className="border-2 border-slate-600 rounded-tr-lg p-2 mt-2 mr-2 h-60  w-72 block"></textarea>
             <div className="border-2 border-slate-600 rounded-br-lg mr-2  mb-2">
               <div className="flex justify-between items-center mx-2 ">
                 <AiOutlineCopy></AiOutlineCopy>
