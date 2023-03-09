@@ -10,6 +10,7 @@ const countries = [
      "Breton",
      "Bosnian",
      "Catalan",
+     "Chinese",
      "Coptic",
      "Czech",
      "Welsh",
@@ -95,7 +96,6 @@ const countries = [
     "Wolof",
      "Xhosa",
     "Yiddish",
-   "Chinese",
     "Zulu",
   
 ];
