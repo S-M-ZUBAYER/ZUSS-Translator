@@ -3,16 +3,18 @@ import { AiOutlineCopy, AiOutlineSound } from 'react-icons/ai';
 import { CiMicrophoneOn } from 'react-icons/ci';
 import { useState } from 'react';
 import countries from './Countries';
+import BtnSpinner from './BtnSpinner';
 
 function App() {
 
+
+  const [isLoading, SetIsLoading]=useState(false)
   const [targetLan, setTargetLan] = useState("")
   const [text, setText] = useState('');
+  // const [engText,setEngText]=useState('')
   const [midTranslate, setMidTranslate] = useState('');
   const [targetTranslate, setTargetTranslate] = useState('');
 
-  const toText = document.getElementById("to-text");
-  const midText = document.getElementById("mid-text");
 
  // create the function to collect the target language to translate
   const handleTargetLan = (event) => {
@@ -31,9 +33,10 @@ function App() {
 
   const handleToTranslate = () => {
 
-    // toText.value = "Translating"
-    setTargetTranslate("Translating");
-    setMidTranslate("Translating");
+    setMidTranslate('')
+    setTargetTranslate('')
+    SetIsLoading(true)
+   
 
     setText(text.trim());
 
@@ -49,7 +52,7 @@ function App() {
     // fetch the api to use post method the get the response from OpenAI
     // Here we can get the value from detect language to English language
 
-    let apiUrlEng = `https://simple-node-server-s-m-zubayer.vercel.app/translateEng`;
+    let apiUrlEng = `http://localhost:5000/translateEng`;
 
     fetch(apiUrlEng, {
       method: "POST",
@@ -61,14 +64,17 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setMidTranslate(data?.data);
-        setText(data.data)
+        // setEngText(data.data)
+        SetIsLoading(false)
       });
 
 
     // fetch the api to use post method the get the response from OpenAI
     // Here we can get the value from English language to selected language
 
-    let apiUrl = `https://simple-node-server-s-m-zubayer.vercel.app/translate`;
+    // https://simple-node-server-s-m-zubayer.vercel.app
+
+    let apiUrl = `http://localhost:5000/translate`;
     fetch(apiUrl, {
       method: "POST",
       headers: {
@@ -79,12 +85,8 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setTargetTranslate(data?.data);
+        SetIsLoading(false)
       });
-
-    console.log(midTranslate, targetTranslate)
-
-    toText.value = targetTranslate
-    midText.value = midTranslate
 
   }
 
@@ -121,7 +123,11 @@ function App() {
 
 
           <div>
-            <textarea placeholder="Translation" id="mid-text" className="border-2 rounded-t-lg  md:rounded-t-none border-slate-600 p-2  mt-2 h-60  w-72 md:w-64 lg:w-72 block"></textarea>
+            <div placeholder="Translation" id="mid-text" className="border-2 text-start rounded-t-lg  md:rounded-t-none border-slate-600 p-2  mt-2 h-60  w-72 md:w-64 lg:w-72 block">
+              {
+                isLoading ? <BtnSpinner></BtnSpinner>: midTranslate
+              }
+            </div>
             <div className="border-2 border-slate-600  mb-2 mr-2 md:mr-0">
               <div className="flex justify-between items-center ml-2 ">
                 <AiOutlineCopy></AiOutlineCopy>
@@ -142,7 +148,11 @@ function App() {
 
 
           <div>
-            <textarea placeholder="Translation" id="to-text" className="border-2 border-slate-600 rounded-t-lg md:rounded-none md:rounded-tr-lg p-2 mt-2 mr-2 h-60  w-72 md:w-64 lg:w-72 block"></textarea>
+            <div placeholder="Translation" id="to-text" className="border-2 text-start border-slate-600 rounded-t-lg md:rounded-none md:rounded-tr-lg p-2 mt-2 mr-2 h-60  w-72 md:w-64 lg:w-72 block">
+            {
+                isLoading ? <BtnSpinner></BtnSpinner>: targetTranslate
+              }
+            </div>
             <div className="border-2 border-slate-600 md:rounded-br-lg mr-2  mb-2">
               <div className="flex justify-between items-center ml-2 ">
                 <AiOutlineCopy></AiOutlineCopy>
