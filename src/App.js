@@ -52,7 +52,7 @@ function App() {
     // fetch the api to use post method the get the response from OpenAI
     // Here we can get the value from detect language to English language
 
-    let apiUrlEng = `http://localhost:5000/translateEng`;
+    let apiUrlEng = `https://simple-node-server-s-m-zubayer.vercel.app/translateEng`;
 
     fetch(apiUrlEng, {
       method: "POST",
@@ -74,7 +74,7 @@ function App() {
 
     // https://simple-node-server-s-m-zubayer.vercel.app
 
-    let apiUrl = `http://localhost:5000/translate`;
+    let apiUrl = `https://simple-node-server-s-m-zubayer.vercel.app/translate`;
     fetch(apiUrl, {
       method: "POST",
       headers: {
