@@ -5,8 +5,13 @@ import { useState } from 'react';
 import countries from './Countries';
 import BtnSpinner from './BtnSpinner';
 
-function App() {
+import React from 'react';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+function App() {
 
   const [isLoading, SetIsLoading]=useState(false)
   const [targetLan, setTargetLan] = useState("")
@@ -22,6 +27,12 @@ function App() {
     setTargetLan(event.target.value)
 
   }
+  // Create the function which show the toast if user didn't select the target language!
+  const notify = () => {
+    toast("Please select the target language!");
+    return;
+  };
+
 
   // create the function to collect the input text from the textarea to translate
   const handleToCollectText = (event) => {
@@ -75,6 +86,9 @@ function App() {
     // https://simple-node-server-s-m-zubayer.vercel.app
 
     let apiUrl = `https://simple-node-server-s-m-zubayer.vercel.app/translate`;
+    if(!targetLan){
+      notify();
+    }
     fetch(apiUrl, {
       method: "POST",
       headers: {
@@ -97,10 +111,9 @@ function App() {
 
 
     <div className="App md:h-screen flex justify-center items-center bg-lime-300">
+      <ToastContainer />
       <div className=" ">
         <h1 className="text-3xl font-bold mb-10 mt-10 md:mt-0">ZUSS Translator</h1>
-       
-
         <div className=' bg-white md:flex rounded-lg p-5'>  
           <div>
             <textarea placeholder="please type here" onChange={handleToCollectText} className="border-2 border-slate-600 rounded-t-lg md:rounded-t-none md:rounded-tl-lg p-2  mt-2 md:ml-2 h-60  w-72 md:w-64 lg:w-72  block"></textarea>
